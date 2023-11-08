@@ -1,2 +1,65 @@
-<h1 align="center">D-FaST: Cognitive Signal Decoding with Disentangled Frequency-Spatial-Temporal Attention</h1>
+# D-FaST: Cognitive Signal Decoding with Disentangled Frequency-Spatial-Temporal Attention
 
+[![stars - D-FaST](https://img.shields.io/github/stars/AdFiFi/D-FaST?style=social)](https://github.com/AdFiFi/D-FaST)
+[![forks - D-FaST](https://img.shields.io/github/forks/AdFiFi/D-FaST?style=social)](https://github.com/AdFiFi/D-FaST)
+![language](https://img.shields.io/github/languages/top/AdFiFi/D-FaST?color=lightgrey)
+![license](https://img.shields.io/github/license/AdFiFi/D-FaST)
+---
+
+![D-FaST.jpg](/pictures/D-FaST.jpg)
+
+## Dataset
+
+Download the BCIC IV-2A and IV-2B dataset from [here](https://www.bbci.de/competition/iv/index.html).
+
+Download the ZuCo-TSR dataset from [here](https://osf.io/q3zws/).
+
+MNRED dataset will be released in the near future.
+
+## Preprocessing data
+
+Each dataset corresponds to a dataloader and a preprocessing scripts. 
+For example, ```smr_preprocess()``` in ```/data/smr.py``` process BCIC IV-2A to ```SMR128.npy``` 
+
+## Training
+
+### Default scripts
+Use default scripts in ```/scripts``` to train any implemented model in ```/model```. 
+All default hyperparameters among these models are tuned for MNRED datasets.
+
+Attention! Wandb is 
+
+### Costumed execution
+
+```bash
+python main.py \
+--model "DFaST" \
+--num_repeat 5 \
+--dataset 'MNRED' \
+--data_dir "../data/MNRED/MNRED.npy" \
+--sparsity 0.6 \
+--batch_size 16 \
+--num_epochs 100 \
+--frequency 200 \
+--num_kernels 128 \
+--window_size 16 \
+--D 30 \
+--p1 8 \
+--p2 16 \
+--drop_last True \
+--num_heads 4 \
+--learning_rate 1e-4 \
+--dropout 0.1 \
+--schedule 'cos' \
+\
+--do_train \
+--do_evaluate \
+--do_test
+```
+
+
+## Citation
+
+## Contact
+
+Please contact us at ```chenweiguo@nudt.edu.cn```

@@ -1,7 +1,5 @@
 #!/bin/bash
 export PYTHONUNBUFFERED=1
-export WANDB_API_KEY=cd4441a5fcdd740b84b45deb6890ecb376bddecb
-export WANDB_MODE=offline
 
 cd ../..
 python main.py \
@@ -9,8 +7,8 @@ python main.py \
 --model "FBNetGen" \
 --num_repeat 5 \
 \
---dataset 'BR' \
---data_dir "../data/BR/BR.npy" \
+--dataset 'MNRED' \
+--data_dir "../data/MNRED/MNRED.npy" \
 --batch_size 16 \
 --num_epochs 100 \
 --drop_last True \

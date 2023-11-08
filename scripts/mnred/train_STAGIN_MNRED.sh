@@ -10,8 +10,8 @@ python main.py \
 --model "STAGIN" \
 --num_repeat 5 \
 \
---dataset 'BR' \
---data_dir "../data/BR/BR.npy" \
+--dataset 'MNRED' \
+--data_dir "../data/MNRED/MNRED.npy" \
 --percentage 1. \
 --batch_size 16 \
 --num_epochs 100 \
