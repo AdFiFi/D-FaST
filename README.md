@@ -19,18 +19,19 @@ MNRED dataset will be released in the near future.
 ## Preprocessing data
 
 Each dataset corresponds to a dataloader and a preprocessing scripts. 
-For example, ```smr_preprocess()``` in ```/data/smr.py``` process BCIC IV-2A to ```SMR128.npy``` 
+For example, ```smr_preprocess()``` in ```data/smr.py``` process BCIC IV-2A to ```SMR128.npy``` 
 
 ## Training
 
 ### Default scripts
-Use default scripts in ```/scripts``` to train any implemented model in ```/model```. 
+Use default scripts in ```scripts/``` to train any implemented model in ```model/```. 
 All default hyperparameters among these models are tuned for MNRED datasets.
 
-Attention! Wandb is 
+Wandb is needed if visualization of training parameters is wanted
 
 ### Costumed execution
 
+run script like this:
 ```bash
 python main.py \
 --model "DFaST" \
@@ -56,6 +57,8 @@ python main.py \
 --do_evaluate \
 --do_test
 ```
+For other baseline models, more hyperparameter can be specified in ```config.py``` 
+and their own ModelConfig in corresponding model files
 
 ## Dependencies
 - python==3.10
