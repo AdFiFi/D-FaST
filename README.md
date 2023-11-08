@@ -6,7 +6,7 @@
 ![license](https://img.shields.io/github/license/AdFiFi/D-FaST)
 ---
 
-![D-FaST.jpg](https://github.com/AdFiFi/D-FaST/raw/main/pictures/D-FaST.jpg)
+![D-FaST.jpg](https://github.com/AdFiFi/D-FaST/blob/main/pictures/D-FaST.jpg)
 
 ## Dataset
 
@@ -29,7 +29,7 @@ All default hyperparameters among these models are tuned for MNRED datasets.
 
 Wandb is needed if visualization of training parameters is wanted
 
-### Costumed execution
+### Customized execution
 
 run script like this:
 ```bash
