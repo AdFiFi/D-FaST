@@ -37,13 +37,13 @@ python main.py \
 --model "DFaST" \
 --num_repeat 5 \
 --dataset 'MNRED' \
---data_dir "../data/MNRED/MNRED.npy" \
+--data_dir "/data/MNRED/MNRED.npy" \
 --sparsity 0.6 \
 --batch_size 16 \
 --num_epochs 100 \
 --frequency 200 \
---num_kernels 128 \
---window_size 16 \
+--num_kernels 64 \
+--window_size 30 \
 --D 30 \
 --p1 8 \
 --p2 16 \
