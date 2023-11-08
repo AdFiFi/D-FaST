@@ -1,13 +1,10 @@
-from random import randrange
 from abc import abstractmethod
-import numpy as np
+
 import torch
-import torch.nn.functional as F
-from sklearn.model_selection import StratifiedKFold
-from torch.nn.utils.rnn import pad_sequence
-from torch.utils.data import Dataset
 from nilearn import connectome
-from sklearn.covariance import OAS
+from sklearn.model_selection import StratifiedKFold
+from torch.utils.data import Dataset
+
 from .data_config import DataConfig
 
 
