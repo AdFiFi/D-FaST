@@ -6,7 +6,7 @@
 ![license](https://img.shields.io/github/license/AdFiFi/D-FaST)
 ---
 
-![D-FaST.jpg](https://github.com/AdFiFi/D-FaST/blob/main/pictures/D-FaST.jpg)
+![D-FaST.jpg](https://github.com/AdFiFi/D-FaST/raw/main/pictures/D-FaST.jpg)
 
 ## Dataset
 
@@ -52,10 +52,8 @@ python main.py \
 --learning_rate 1e-4 \
 --dropout 0.1 \
 --schedule 'cos' \
-\
 --do_train \
---do_evaluate \
---do_test
+--do_evaluate
 ```
 For other baseline models, more hyperparameter can be specified in ```config.py``` 
 and their own ModelConfig in corresponding model files
