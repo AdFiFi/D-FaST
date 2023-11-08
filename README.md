@@ -6,7 +6,7 @@
 ![license](https://img.shields.io/github/license/AdFiFi/D-FaST)
 ---
 
-![D-FaST.jpg](/pictures/D-FaST.jpg)
+![D-FaST.jpg](pictures/D-FaST.jpg)
 
 ## Dataset
 
@@ -57,6 +57,17 @@ python main.py \
 --do_test
 ```
 
+## Dependencies
+- python==3.10
+- braindecode==0.4.85
+- einops
+- mne
+- nilearn==0.9.2
+- ptwt==0.1.7
+- scikit-learn==1.2.1
+- scipy
+- torch==2.1.0
+- wandb
 
 ## Citation
 
