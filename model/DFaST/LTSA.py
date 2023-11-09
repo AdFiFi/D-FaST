@@ -1,28 +1,9 @@
+from math import sqrt
+
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
-from torch.nn import TransformerEncoderLayer
 from einops import rearrange
-from math import log, sqrt
-
-
-class ConvLayer(nn.Module):
-    def __init__(self, c_in):
-        super(ConvLayer, self).__init__()
-        self.downConv = nn.Conv1d(in_channels=c_in,
-                                  out_channels=c_in,
-                                  kernel_size=3,
-                                  padding=1,
-                                  stride=2,
-                                  padding_mode='circular')
-        self.norm = nn.BatchNorm1d(c_in)
-        self.activation = nn.ELU()
-
-    def forward(self, x):
-        x = self.downConv(x.transpose(1, 2))
-        x = self.norm(x)
-        x = self.activation(x).transpose(1, 2)
-        return x
+from torch.nn import functional as F
 
 
 class LocalTemporalSlidingAttention(nn.Module):
@@ -90,6 +71,14 @@ class LocalTemporalSlidingAttention(nn.Module):
 
 
 class BaseTemporalModule(nn.Module):
+    """
+    EEGNet: a compact convolutional neural network for EEG-based brain–computer interfaces
+
+    V. J. Lawhern, A. J. Solon, N. R. Waytowich, S. M. Gordon, C. P. Hung and B. J. Lance
+
+    Journal of neural engineering 2018 Vol. 15 Issue 5 Pages 056013
+
+    """
     def __init__(self, config, D=5, pooling=True):
         super(BaseTemporalModule, self).__init__()
         self.config = config

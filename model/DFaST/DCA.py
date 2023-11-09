@@ -2,9 +2,8 @@ from math import sqrt
 
 import torch
 import torch.nn as nn
-from torch.nn import functional as f
-from torch.nn import TransformerEncoderLayer
 from einops import rearrange
+from torch.nn import functional as f
 
 
 class InceptionBlock(nn.Module):
@@ -43,8 +42,8 @@ class DynamicConnectogramAttention(nn.Module):
         self.sparsity = config.sparsity
         self.num_heads = config.num_heads
         self.output_node_size = config.D
-        # kern_length = config.frequency // 2
-        kern_length = 3
+        kern_length = config.frequency // 2
+        # kern_length = 3 # ZuCo
 
         self.conv = nn.Sequential(nn.ZeroPad2d((0, 1 - kern_length % 2, 0, 0)),
                                   nn.Conv2d(1, config.num_kernels, (1, kern_length), padding=(0, (kern_length-1)//2),
@@ -60,31 +59,6 @@ class DynamicConnectogramAttention(nn.Module):
         self.pooling = nn.AvgPool2d((1, config.p1)) if pooling else None
         self.batch_norm = nn.BatchNorm2d(config.num_kernels)
         self.dropout = nn.Dropout(dropout)
-
-    # def forward(self, hidden_state):
-    #     hidden_state = self.conv(hidden_state)
-    #     B, F, N, E = hidden_state.shape
-    #     H = self.num_heads if E % self.num_heads == 0 else 1
-    #     M = self.output_node_size
-    #     scale = 1. / sqrt(E)
-    #
-    #     query = self.query_conv(hidden_state).view(B, F, N, H, -1)
-    #     value = self.value_conv(hidden_state).view(B, F, N, H, -1)
-    #
-    #     sub_graph_key = self.sub_graph_key_conv(hidden_state).view(B, F, M, H, -1)
-    #     score = torch.einsum('b f n h e, b f m h e -> b f h n m', query, sub_graph_key)
-    #     adjacency = self.sparse_adjacency(scale * score)
-    #     adjacency = self.dropout(torch.softmax(adjacency, dim=-1))
-    #
-    #     graph = torch.einsum('b f h n m, b f n h e -> b f m h e', adjacency, value)
-    #     graph = graph + sub_graph_key
-    #     graph = rearrange(graph, 'b f m h e -> b f m (h e) ')
-    #     graph = self.batch_norm(f.gelu(graph))
-    #     if self.pooling is not None:
-    #         graph = self.pooling(graph)
-    #         graph = rearrange(graph, 'b f m t -> b (f m) t ').unsqueeze(2)
-    #     # return graph, score
-    #     return graph
 
     def forward(self, hidden_state, return_adjacency=False):
         if hidden_state.shape[1] == 1:
@@ -138,6 +112,14 @@ class DynamicConnectogramAttention(nn.Module):
 
 
 class BaseSpatialModule(nn.Module):
+    """
+    EEGNet: a compact convolutional neural network for EEG-based brain–computer interfaces
+
+    V. J. Lawhern, A. J. Solon, N. R. Waytowich, S. M. Gordon, C. P. Hung and B. J. Lance
+
+    Journal of neural engineering 2018 Vol. 15 Issue 5 Pages 056013
+
+    """
     def __init__(self, config, input_node_size=30, output_node_size=5, pooling=True):
         super(BaseSpatialModule, self).__init__()
         self.config = config

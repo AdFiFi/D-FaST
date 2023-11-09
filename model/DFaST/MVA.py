@@ -5,6 +5,14 @@ from torch.nn import functional as f
 
 
 class ECAAttention(nn.Module):
+    """
+    ECA-Net: Efficient Channel Attention for Deep Convolutional Neural Networks
+
+    Q. Wang, B. Wu, P. F. Zhu, P. Li, W. Zuo and Q. Hu
+
+    2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 2019 Pages 11531-11539
+
+    """
     def __init__(self, kernel_size=3):
         super().__init__()
         self.gap = nn.AdaptiveAvgPool2d(1)
@@ -35,6 +43,16 @@ class ECAAttention(nn.Module):
 
 
 class SEAttention(nn.Module):
+    """
+    Squeeze-and-excitation networks
+
+    J. Hu, L. Shen and G. Sun
+
+    Proceedings of the IEEE conference on computer vision and pattern recognition 2018
+
+    Pages: 7132-7141
+
+    """
     def __init__(self, channel=512, reduction=16):
         super().__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
@@ -104,11 +122,9 @@ class MultiViewAttention(nn.Module):
         for kernel in self.kernels:
             multi_freq_feature.append(kernel(hidden_state))
         multi_freq_feature = torch.stack(multi_freq_feature, dim=1).squeeze(2)
-        # multi_freq_feature = self.conv(hidden_state)
         multi_freq_feature = rearrange(multi_freq_feature, 'b g c n t -> b (g c) n t')
         multi_freq_feature = self.attention(multi_freq_feature)
         multi_freq_feature = self.batch_norm(multi_freq_feature)
-        # multi_freq_feature = self.batch_norm(multi_freq_feature + hidden_state.expand_as(multi_freq_feature))
 
         multi_freq_feature = self.dw_conv(multi_freq_feature)
         if self.pooling is not None:
@@ -122,13 +138,20 @@ class MultiViewAttention(nn.Module):
         for kernel in self.kernels:
             multi_freq_feature.append(kernel(hidden_state))
         multi_freq_feature = torch.stack(multi_freq_feature, dim=1).squeeze(2)
-        # multi_freq_feature = self.conv(hidden_state)
         multi_freq_feature = rearrange(multi_freq_feature, 'b g c n t -> b (g c) n t')
         attention = self.attention.get_attention(multi_freq_feature)
         return attention
 
 
 class BaseFrequencyModule(nn.Module):
+    """
+    EEGNet: a compact convolutional neural network for EEG-based brain–computer interfaces
+
+    V. J. Lawhern, A. J. Solon, N. R. Waytowich, S. M. Gordon, C. P. Hung and B. J. Lance
+
+    Journal of neural engineering 2018 Vol. 15 Issue 5 Pages 056013
+
+    """
     def __init__(self, config):
         super(BaseFrequencyModule, self).__init__()
         self.config = config
@@ -141,7 +164,6 @@ class BaseFrequencyModule(nn.Module):
         self.batch_norm = nn.BatchNorm2d(config.num_kernels, False)
 
     def forward(self, hidden_state):
-
         hidden_state = self.padding(hidden_state) if self.padding_flag else hidden_state
         hidden_state = self.batch_norm(self.conv(hidden_state))
         return hidden_state
