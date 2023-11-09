@@ -16,20 +16,20 @@ Download the ZuCo-TSR dataset from [here](https://osf.io/q3zws/).
 
 MNRED dataset will be released in the near future.
 
-## Preprocessing data
+## Preprocessing Data
 
 Each dataset corresponds to a dataloader and a preprocessing scripts. 
 For example, ```smr_preprocess()``` in ```data/smr.py``` process BCIC IV-2A to ```SMR128.npy``` 
 
 ## Training
 
-### Default scripts
+### Default Scripts
 Use default scripts in ```scripts/``` to train any implemented model in ```model/```. 
 All default hyperparameters among these models are tuned for MNRED datasets.
 
 Wandb is needed if visualization of training parameters is wanted
 
-### Customized execution
+### Customized Execution
 
 run script like this:
 ```bash
@@ -72,6 +72,6 @@ and their own ModelConfig in corresponding model files
 
 ## Citation
 
-## Contact
+## Contact Us
 
-Please contact us at ```chenweiguo@nudt.edu.cn```
+If you are interested to leave a message, please feel free to send any email to us at ```chenweiguo@nudt.edu.cn```
