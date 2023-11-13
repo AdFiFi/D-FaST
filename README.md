@@ -34,10 +34,10 @@ Wandb is needed if visualization of training parameters is wanted
 run script like this:
 ```bash
 python main.py \
---model "DFaST" \
+--model DFaST \
 --num_repeat 5 \
---dataset 'MNRED' \
---data_dir "/data/MNRED/MNRED.npy" \
+--dataset MNRED \
+--data_dir /data/MNRED/MNRED.npy \
 --sparsity 0.6 \
 --batch_size 16 \
 --num_epochs 100 \
@@ -51,7 +51,7 @@ python main.py \
 --num_heads 4 \
 --learning_rate 1e-4 \
 --dropout 0.1 \
---schedule 'cos' \
+--schedule cos \
 --do_train \
 --do_evaluate
 ```
