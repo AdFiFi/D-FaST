@@ -6,6 +6,8 @@
 ![license](https://img.shields.io/github/license/AdFiFi/D-FaST)
 ---
 
+## Approach
+
 ![D-FaST.jpg](pictures/D-FaST.jpg)
 
 ## Dataset
