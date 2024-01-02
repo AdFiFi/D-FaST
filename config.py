@@ -234,8 +234,7 @@ def init_config():
 
     global_group = parser.add_argument_group(title="global", description="")
     global_group.add_argument("--project", default="", type=str, help="")
-    global_group.add_argument("--wandb_entity", default='', type=str, help="")
-    # global_group.add_argument("--wandb_entity", default='aff', type=str, help="")
+    global_group.add_argument("--wandb_entity", default='cwg', type=str, help="")
     global_group.add_argument("--log_dir", default="./log_dir", type=str, help="")
     global_group.add_argument("--model", default="FaSTP", type=str, help="")
     global_group.add_argument("--num_repeat", default=5, type=int, help="")
