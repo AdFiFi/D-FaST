@@ -1,7 +1,6 @@
 #!/bin/bash
 export PYTHONUNBUFFERED=1
 export CUDA_VISIBLE_DEVICES=2
-export WANDB_API_KEY=local-1be95a8bdeaf0e5e73d1b448429ff93821d77b3d
 
 cd ../..
 python main.py \
