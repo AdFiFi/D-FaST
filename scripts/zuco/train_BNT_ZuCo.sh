@@ -6,7 +6,7 @@ cd ../..
 python main.py \
 --num_repeat 5 \
 --wandb_entity cwg \
---project ZuCo-NR \
+--project ZuCo-TSR \
 \
 --model "BNT" \
 \
