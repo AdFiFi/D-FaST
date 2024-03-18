@@ -1,13 +1,16 @@
+import numpy as np
 import pywt
+import torch
 from einops import repeat, rearrange
 from scipy import signal
 
 from utils import *
+from data.preprocess import DE_PSD
 
 
-class FaSTPTrainer(Trainer):
+class DFaSTTrainer(Trainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
-        super(FaSTPTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
+        super(DFaSTTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
     def prepare_inputs_kwargs(self, inputs):
         time_series = inputs['time_series']
@@ -22,27 +25,27 @@ class FaSTPTrainer(Trainer):
                     "labels": labels.float().to(self.device)}
 
 
-class FaSTPOnlySpatialTrainer(FaSTPTrainer):
+class DFaSTOnlySpatialTrainer(DFaSTTrainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
-        super(FaSTPOnlySpatialTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
+        super(DFaSTOnlySpatialTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
 
-class FaSPTrainer(FaSTPTrainer):
+class FaSPTrainer(DFaSTTrainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
         super(FaSPTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
 
-class LMDATrainer(FaSTPTrainer):
+class LMDATrainer(DFaSTTrainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
         super(LMDATrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
 
-class ShallowConvNetTrainer(FaSTPTrainer):
+class ShallowConvNetTrainer(DFaSTTrainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
         super(ShallowConvNetTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
 
-class DeepConvNetTrainer(FaSTPTrainer):
+class DeepConvNetTrainer(DFaSTTrainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
         super(DeepConvNetTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
@@ -240,8 +243,6 @@ class SBLESTTrainer(Trainer):
         self.Wh = None
 
     def load_datasets(self):
-        # datasets = eval(
-        #     f"load_{self.args.dataset}_data")(self.data_config)
         datasets = eval(
             f"{self.args.dataset}Dataset")(self.data_config, k=self.task_id, subject_id=self.subject_id)
 
@@ -337,7 +338,7 @@ class SBLESTTrainer(Trainer):
         return result
 
 
-class TCANetTrainer(FaSTPTrainer):
+class TCANetTrainer(DFaSTTrainer):
     def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
         super(TCANetTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
 
@@ -456,3 +457,50 @@ class TCACNetTrainer(Trainer):
 
         return losses / len(loss_list)
 
+
+class GraphSleepNetTrainer(Trainer):
+    def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
+        super(GraphSleepNetTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
+
+    def prepare_inputs_kwargs(self, inputs):
+        time_series = self.get_DE_PSD(inputs['time_series'])
+        labels = inputs['labels']
+        if self.model.training and self.args.mix_up:
+            time_series, labels, _ = continues_mixup_data(
+                # time_series, node_feature, y1=labels.float(), alpha=self.data_config.alpha, beta=self.data_config.beta)
+                time_series, y1=labels.float())
+        return {"time_series": time_series.to(self.device),
+                "labels": labels.float().to(self.device)}
+
+    def get_DE_PSD(self, time_series):
+        time_series = time_series.numpy()
+        features = []
+        for ts in time_series:
+            nf = self.data_config.time_series_size//self.args.num_heads
+            stft_para = {
+                'stftn': nf,
+                'fStart': [0.5, 2, 4, 6, 8, 11, 14, 22, 31],
+                'fEnd': [4, 6, 8, 11, 14, 22, 31, 40, 50],
+                'fs': nf,
+                'window': 1,
+            }
+            context_features = []
+            for i in range(4):
+                t = ts[:, i*nf:(i+1)*nf]
+                _, de = DE_PSD(t, stft_para)
+                context_features.append(de)
+            feature = np.stack(context_features, axis=0)
+            features.append(feature)
+        return torch.from_numpy(np.array(features)).float()
+
+
+class HierCorrPoolTrainer(Trainer):
+    def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
+        super(HierCorrPoolTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
+
+    def prepare_inputs_kwargs(self, inputs):
+        time_series = inputs['time_series']
+        labels = inputs['labels']
+        time_series = rearrange(time_series, "b n (w h) -> b w n h", h=self.model_config.input_dimension)
+        return {"time_series": time_series.to(self.device),
+                "labels": labels.float().to(self.device)}
