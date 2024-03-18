@@ -110,8 +110,8 @@ def parameters(args):
 
 if __name__ == '__main__':
     Args = init_config()
-    # if Args.within_subject:
-    #     within_subject(Args)
-    # else:
-    #     cross_subject(Args)
+    if Args.within_subject:
+        within_subject(Args)
+    else:
+        cross_subject(Args)
     parameters(Args)
