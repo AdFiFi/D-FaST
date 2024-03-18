@@ -8,7 +8,7 @@ python main.py \
 --wandb_entity cwg \
 --project SMR \
 \
---model "FaSTP" \
+--model "DFaST" \
 --num_repeat 5 \
 \
 --dataset 'SMR' \
