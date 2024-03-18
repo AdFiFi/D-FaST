@@ -12,7 +12,7 @@ python main.py \
 --num_repeat 5 \
 \
 --dataset 'ZuCo' \
---data_dir "/data/datasets/ZuCo/ZuCo-NR.npy" \
+--data_dir "/data/datasets/ZuCo/ZuCo-TSR.npy" \
 --sparsity 1 \
 --batch_size 1 \
 --num_epochs 100 \
