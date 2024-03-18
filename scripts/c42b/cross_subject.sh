@@ -1,7 +1,5 @@
 #!/bin/bash
 export PYTHONUNBUFFERED=1
-#export WANDB_API_KEY=local-1a6c67774093a56b310d8313b6821f2d98e59678
-#export WANDB_MODE=offline
 
 cd ../..
 #export CUDA_VISIBLE_DEVICES=0
