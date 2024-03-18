@@ -10,10 +10,6 @@ from torch import distributed
 
 # os.environ['CUDA_VISIBLE_DEVICES'] = "1,3"
 logger = logging.getLogger(__name__)
-# os.environ['WANDB_API_KEY'] = "75f175974297dec15f4f8ea7970a66002d3c2cc6"
-# os.environ['WANDB_API_KEY'] = "cd4441a5fcdd740b84b45deb6890ecb376bddecb"
-# os.environ['WANDB_API_KEY'] = "local-1a6c67774093a56b310d8313b6821f2d98e59678"
-# os.environ['WANDB_API_KEY'] = "local-961e0d861bcf53caabe769f4ce59fe7a1ff8eede"
 # os.environ['WANDB_MODE'] = "offline"
 
 
