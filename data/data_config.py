@@ -21,12 +21,4 @@ class DataConfig:
         self.class_weight = [1]*num_class
 
 
-# class ABIDEConfig(DataConfig):
-#     def __init__(self,
-#                  args, ):
-#         super(ABIDEConfig, self).__init__(args,
-#                                           time_series_sz=100,
-#                                           node_sz=200,
-#                                           node_feature_sz=200)
-
 
