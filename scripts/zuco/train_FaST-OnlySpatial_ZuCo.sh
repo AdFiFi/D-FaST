@@ -8,7 +8,7 @@ python main.py \
 --wandb_entity cwg \
 --project ZuCo-TSR \
 \
---model "FaSTPOnlySpatial" \
+--model "DFaSTOnlySpatial" \
 --num_repeat 5 \
 \
 --dataset 'ZuCo' \

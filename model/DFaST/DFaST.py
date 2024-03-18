@@ -1,15 +1,13 @@
 import copy
 
-import numpy as np
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
 from einops import rearrange
+from torch.nn import functional as F
 
-from .Layers import BrainCubeBlock, EEGNetPlus, EEGFormer, EEGNetP
-from .MVA import MultiViewAttention, BaseFrequencyModule
 from .DCA import DynamicConnectogramAttention, BaseSpatialModule
 from .LTSA import LocalTemporalSlidingAttention, BaseTemporalModule
+from .MVA import MultiViewAttention, BaseFrequencyModule
 from ..base import BaseConfig, ModelOutputs
 
 
@@ -188,12 +186,12 @@ class DFaSTForClassification(nn.Module):
         self.d_fast = DFaST(config)
         self.dropout = nn.Dropout(config.dropout)
         if config.aggregate == 'flatten':
-            hidden_size = self.fast_p.output_time_series_size * self.fast_p.output_time_feature_size
+            hidden_size = self.d_fast.output_time_series_size * self.d_fast.output_time_feature_size
         elif config.aggregate == 'mean':
-            hidden_size = self.fast_p.output_time_feature_size
+            hidden_size = self.d_fast.output_time_feature_size
         elif config.aggregate == 'attention':
-            self.attention = nn.Linear(self.fast_p.output_time_series_size, 1, bias=False)
-            hidden_size = self.fast_p.output_time_feature_size
+            self.attention = nn.Linear(self.d_fast.output_time_series_size, 1, bias=False)
+            hidden_size = self.d_fast.output_time_feature_size
         else:
             assert ""
         self.fc = nn.Sequential(
@@ -210,7 +208,8 @@ class DFaSTForClassification(nn.Module):
         loss = self.loss_fn(logits, labels)
         if self.config.dict_output:
             return ModelOutputs(logits=logits,
-                                loss=loss)
+                                loss=loss,
+                                hidden_state=features)
         else:
             return logits, loss
 
@@ -232,12 +231,12 @@ class DFaSTOnlySpatialForClassification(nn.Module):
         self.d_fast = DFaSTOnlySpatial(config)
         self.dropout = nn.Dropout(config.dropout)
         if config.aggregate == 'flatten':
-            hidden_size = self.fast_p.output_node_size * self.fast_p.output_node_feature_size
+            hidden_size = self.d_fast.output_node_size * self.d_fast.output_node_feature_size
         elif config.aggregate == 'mean':
-            hidden_size = self.fast_p.output_node_feature_size
+            hidden_size = self.d_fast.output_node_feature_size
         elif config.aggregate == 'attention':
-            self.attention = nn.Linear(self.fast_p.output_node_feature_size, 1, bias=False)
-            hidden_size = self.fast_p.output_node_feature_size
+            self.attention = nn.Linear(self.d_fast.output_node_feature_size, 1, bias=False)
+            hidden_size = self.d_fast.output_node_feature_size
         else:
             assert ""
         self.fc = nn.Sequential(
@@ -254,7 +253,8 @@ class DFaSTOnlySpatialForClassification(nn.Module):
         loss = self.loss_fn(logits, labels)
         if self.config.dict_output:
             return ModelOutputs(logits=logits,
-                                loss=loss)
+                                loss=loss,
+                                hidden_state=features)
         else:
             return logits, loss
 

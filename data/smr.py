@@ -17,8 +17,8 @@ class SMRDataset(BaseDataset):
 
     def load_data(self, one_hot=True):
         data = np.load(self.data_config.data_dir, allow_pickle=True).item()
-        # time_series = data["timeseries"]
-        time_series = data["timeseries"][:, :, :550]
+        time_series = data["timeseries"]
+        # time_series = data["timeseries"][:, :, :550]
         correlation = data["corr"]
         labels = data["labels"]
         subject_id = data["subject_id"]

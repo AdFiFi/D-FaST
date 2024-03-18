@@ -1,13 +1,13 @@
 import torch
 
-from trainers import FaSTPTrainer
+from trainers import DFaSTTrainer
 from config import init_config
 from data import *
 
 
 def mva_attention():
     args = init_config()
-    trainer = FaSTPTrainer(args, task_id=0)
+    trainer = DFaSTTrainer(args, task_id=0)
     trainer.load_model()
     dataloader = trainer.data_loaders['test']
     trainer.model.eval()
@@ -32,7 +32,7 @@ def dca_graph():
     t0 = time_series[labels[:, 0] == 1].mean(0)
     t1 = time_series[labels[:, 1] == 1].mean(0)
     batch = torch.stack([torch.from_numpy(t0).float(), torch.from_numpy(t1).float()], 0)
-    trainer = FaSTPTrainer(args, task_id=0)
+    trainer = DFaSTTrainer(args, task_id=0)
     trainer.load_model()
     trainer.model.eval()
     batch = batch.unsqueeze(1)

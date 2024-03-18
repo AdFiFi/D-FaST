@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from ..base import BaseConfig, ModelOutputs
-from ..FaSTP import BaseSpatialModule, BaseTemporalModule, BaseFrequencyModule
+from ..DFaST import BaseSpatialModule, BaseTemporalModule, BaseFrequencyModule
 
 
 class EEGNetConfig(BaseConfig):

@@ -31,9 +31,9 @@ def init_model_config(args, data_config: DataConfig):
                                       node_feature_size=data_config.node_feature_size,
                                       time_series_size=data_config.time_series_size,
                                       num_classes=data_config.num_class,
-                                      window_size=5,
+                                      # window_size=5,
                                       # window_size=40,
-                                      # window_size=50,
+                                      window_size=50,
                                       cnn_pool_size=16,
                                       graph_generation='product',  # product or linear
                                       num_gru_layers=4,
@@ -236,7 +236,7 @@ def init_config():
     global_group.add_argument("--project", default="", type=str, help="")
     global_group.add_argument("--wandb_entity", default='cwg', type=str, help="")
     global_group.add_argument("--log_dir", default="./log_dir", type=str, help="")
-    global_group.add_argument("--model", default="FaSTP", type=str, help="")
+    global_group.add_argument("--model", default="DFaST", type=str, help="")
     global_group.add_argument("--num_repeat", default=5, type=int, help="")
     global_group.add_argument("--within_subject", action="store_true", help="")
     global_group.add_argument("--subject_num", default=10, type=int, help="")

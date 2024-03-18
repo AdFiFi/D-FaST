@@ -6,7 +6,7 @@ cd ../..
 python main.py \
 \
 --project "FaST-P-C42B1" \
---model "FaSTP" \
+--model "DFaST" \
 --num_repeat 5 \
 \
 --dataset "C42B" \
