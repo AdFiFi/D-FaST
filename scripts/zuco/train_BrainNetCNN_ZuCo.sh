@@ -12,7 +12,7 @@ python main.py \
 --project ZuCo-NR \
 \
 --dataset 'ZuCo' \
---data_dir "/data/datasets/ZuCo/ZuCo-NR.npy" \
+--data_dir "/data/datasets/ZuCo/ZuCo-TSR.npy" \
 --batch_size 1 \
 --num_epochs 100 \
 --drop_last True \
