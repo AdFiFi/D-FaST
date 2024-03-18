@@ -38,9 +38,6 @@ class SMRDataset(BaseDataset):
             self.select_subject()
         groups = np.array([f"{int(s)}_{int(l)}" for s, l in zip(self.all_data['subject_id'], labels)])
         self.train_index, self.test_index = list(self.k_fold.split(self.all_data['time_series'], groups))[self.k]
-        # index = np.arange(self.all_data['tags'].shape[0])
-        # self.train_index = index[self.all_data['tags'] == 1]
-        # self.test_index = index[self.all_data['tags'] == 0]
         self.all_data['labels'] = F.one_hot(torch.from_numpy(self.all_data['labels'] - 1).to(torch.int64)).numpy()
         shuffle(self.train_index)
 
@@ -53,9 +50,6 @@ class SMRDataset(BaseDataset):
             if self.data_config.dynamic else 0
         time_series = time_series[:, sampling_init:sampling_init + self.data_config.time_series_size]
         correlation = self.connectivity(time_series, activate=False)
-        # time_series = self.norm(time_series)
-        # correlation = self.correlation(time_series)
-        # correlation = torch.from_numpy(self.all_data['correlation'][idx[item]]).float()
 
         return {'time_series': time_series,
                 'correlation': correlation,
