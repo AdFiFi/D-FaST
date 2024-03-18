@@ -74,6 +74,20 @@ and their own ModelConfig in corresponding model files
 
 ## Citation
 
+```
+@ARTICLE{10445385,
+  author={Chen, WeiGuo and Wang, Changjian and Xu, Kele and Yuan, Yuan and Bai, Yanru and Zhang, Dongsong},
+  journal={IEEE Transactions on Cognitive and Developmental Systems}, 
+  title={D-FaST: Cognitive Signal Decoding with Disentangled Frequency-Spatial-Temporal Attention}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-18},
+  keywords={Feature extraction;Frequency-domain analysis;Decoding;Electroencephalography;Data mining;Brain modeling;Time series analysis;Cognitive Language Processing (CLP);Cognitive Signal Decoding (CSD);Frequency-spatial-temporal domain attention},
+  doi={10.1109/TCDS.2024.3370261}}
+
+```
+
 ## Contact Us
 
 If you are interested to leave a message, please feel free to send any email to us at ```chenweiguo@nudt.edu.cn```
