@@ -9,7 +9,7 @@ python main.py \
 --model "BrainNetCNN" \
 --num_repeat 5 \
 --wandb_entity cwg \
---project ZuCo-NR \
+--project ZuCo-TSR \
 \
 --dataset 'ZuCo' \
 --data_dir "/data/datasets/ZuCo/ZuCo-TSR.npy" \
