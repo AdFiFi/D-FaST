@@ -5,7 +5,6 @@ from einops import repeat, rearrange
 from scipy import signal
 
 from utils import *
-from data.preprocess import DE_PSD
 
 
 class DFaSTTrainer(Trainer):
@@ -456,51 +455,3 @@ class TCACNetTrainer(Trainer):
                        'Learning rate': self.optimizer.param_groups[0]['lr']})
 
         return losses / len(loss_list)
-
-
-class GraphSleepNetTrainer(Trainer):
-    def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
-        super(GraphSleepNetTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
-
-    def prepare_inputs_kwargs(self, inputs):
-        time_series = self.get_DE_PSD(inputs['time_series'])
-        labels = inputs['labels']
-        if self.model.training and self.args.mix_up:
-            time_series, labels, _ = continues_mixup_data(
-                # time_series, node_feature, y1=labels.float(), alpha=self.data_config.alpha, beta=self.data_config.beta)
-                time_series, y1=labels.float())
-        return {"time_series": time_series.to(self.device),
-                "labels": labels.float().to(self.device)}
-
-    def get_DE_PSD(self, time_series):
-        time_series = time_series.numpy()
-        features = []
-        for ts in time_series:
-            nf = self.data_config.time_series_size//self.args.num_heads
-            stft_para = {
-                'stftn': nf,
-                'fStart': [0.5, 2, 4, 6, 8, 11, 14, 22, 31],
-                'fEnd': [4, 6, 8, 11, 14, 22, 31, 40, 50],
-                'fs': nf,
-                'window': 1,
-            }
-            context_features = []
-            for i in range(4):
-                t = ts[:, i*nf:(i+1)*nf]
-                _, de = DE_PSD(t, stft_para)
-                context_features.append(de)
-            feature = np.stack(context_features, axis=0)
-            features.append(feature)
-        return torch.from_numpy(np.array(features)).float()
-
-
-class HierCorrPoolTrainer(Trainer):
-    def __init__(self, args, local_rank=0, task_id=0, subject_id=0):
-        super(HierCorrPoolTrainer, self).__init__(args, local_rank=local_rank, task_id=task_id, subject_id=subject_id)
-
-    def prepare_inputs_kwargs(self, inputs):
-        time_series = inputs['time_series']
-        labels = inputs['labels']
-        time_series = rearrange(time_series, "b n (w h) -> b w n h", h=self.model_config.input_dimension)
-        return {"time_series": time_series.to(self.device),
-                "labels": labels.float().to(self.device)}
